@@ -1,6 +1,6 @@
 <?php
 
-namespace Dtophp;
+namespace Dtophp\Exception;
 
 use \Exception;
 

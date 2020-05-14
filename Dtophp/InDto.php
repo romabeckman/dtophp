@@ -3,6 +3,7 @@
 namespace Dtophp;
 
 use \BadMethodCallException;
+use \Dtophp\Exception\DtoException;
 use \ReflectionClass;
 use \ReflectionException;
 use \ReflectionMethod;
