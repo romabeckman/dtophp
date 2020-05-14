@@ -93,16 +93,14 @@ class InDto
             $type = $parameter->getType();
 
             if (is_null($type)) {
-                throw new UnexpectedValueException('The "' . $reflectionMethod->name . '" method must have type in parameter.');
+                return $this->inputs[$parameter->name];
             }
 
-            $value = Util::fixesByType($type, $this->inputs[$parameter->name]);
-
-            if ($type->allowsNull() === false && is_null($value)) {
-                throw new UnexpectedValueException('The "$' . $parameter->getName() . '" parameter in the "' . $reflectionMethod->name . '" method must be of the type null.');
+            if ($type->allowsNull() === false) {
+                throw new DtoException('The "$' . $parameter->getName() . '" parameter in the "' . $reflectionMethod->name . '" method must accept of the null type.');
             }
 
-            return $value;
+            return Util::fixesByType($type, $this->inputs[$parameter->name]);
         } else {
             $reflection = new InDto($newClass->name, $this->inputs[$parameter->name] ?? []);
             return $reflection->getInstance();
