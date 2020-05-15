@@ -4,19 +4,27 @@ namespace Dtophp\Libraries;
 
 use \Dtophp\Exception\DtoException;
 use \Dtophp\InDto;
+use \Dtophp\OutDto;
 use \ReflectionClass;
 use \ReflectionException;
 use \ReflectionParameter;
 use \UnexpectedValueException;
 
 /**
- * Description of InDto
+ * Description
  *
- * @author Romário Beckman
+ * @author Romário Beckman <romabeckman@gmail.com>
  */
 class ReflectionDto {
 
-    static public function populateMethodsSet(InDto $instance, ?string $key = null): void {
+    /**
+     *
+     * @param InDto $instance
+     * @param string|null $key
+     * @return void
+     * @throws DtoException
+     */
+    static public function populate(InDto $instance, ?string $key = null): void {
         $reflection = new ReflectionClass(get_class($instance));
 
         foreach ($reflection->getProperties() as $properties) {
@@ -35,7 +43,7 @@ class ReflectionDto {
                 $parameter = $reflectionMethod->getParameters()[0];
                 $value = is_null($parameter->getClass()) ?
                         static::parameter($parameter, $key) :
-                        static::newClass($parameter);
+                        static::newInClass($parameter);
 
                 if (is_null($value) === false) {
                     $reflectionMethod->invoke($instance, $value);
@@ -46,7 +54,13 @@ class ReflectionDto {
         }
     }
 
-    static private function newClass(ReflectionParameter $parameter): InDto {
+    /**
+     *
+     * @param ReflectionParameter $parameter
+     * @return InDto
+     * @throws UnexpectedValueException
+     */
+    static private function newInClass(ReflectionParameter $parameter): InDto {
         $reflection = new ReflectionClass($parameter->getClass()->name);
         if (is_null($reflection->getParentClass()) || $reflection->getParentClass()->name !== InDto::class) {
             throw new UnexpectedValueException('The class "' . $reflection->getName() . '" must extends abstract class "' . InDto::class . '".');
@@ -55,6 +69,12 @@ class ReflectionDto {
         return $reflection->newInstance($parameter->name);
     }
 
+    /**
+     *
+     * @param ReflectionParameter $parameter
+     * @param string|null $key
+     * @return type
+     */
     static private function parameter(ReflectionParameter $parameter, ?string $key) {
         $type = $parameter->getType();
 
@@ -63,6 +83,46 @@ class ReflectionDto {
         }
 
         return Util::fixesByType($type, Util::bodyHttp($key)[$parameter->name]);
+    }
+
+    /**
+     *
+     * @param OutDto $instance
+     * @return string
+     */
+    static public function json(OutDto $instance): string {
+        return json_encode(static::array($instance));
+    }
+
+    /**
+     *
+     * @param OutDto $instance
+     * @return array
+     * @throws DtoException
+     */
+    static public function array(OutDto $instance): array {
+        $reflection = new ReflectionClass(get_class($instance));
+        $data = [];
+
+        foreach ($reflection->getProperties() as $properties) {
+            $name = 'get' . ucfirst($properties->name);
+
+            try {
+                $reflectionMethod = $reflection->getMethod($name);
+
+                if (
+                        is_null($reflectionMethod->getReturnType()) === false &&
+                        $reflectionMethod->getReturnType()->isBuiltin() === false
+                ) {
+                    $data[$properties->name] = $reflectionMethod->invoke($instance)->toArray();
+                } else {
+                    $data[$properties->name] = $reflectionMethod->invoke($instance);
+                }
+            } catch (ReflectionException $ex) {
+                throw new DtoException('Missing methods in the class:' . PHP_EOL . PHP_EOL . 'public function ' . $name . '() { return $this->' . $properties->name . '; }' . PHP_EOL . PHP_EOL);
+            }
+        }
+        return $data;
     }
 
 }

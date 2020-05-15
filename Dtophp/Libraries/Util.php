@@ -5,10 +5,24 @@ namespace Dtophp\Libraries;
 use \ReflectionNamedType;
 use \ReflectionProperty;
 
+/**
+ * Description
+ *
+ * @author Romário Beckman <romabeckman@gmail.com>
+ */
 class Util {
 
+    /**
+     *
+     * @var array
+     */
     static private $inputs;
 
+    /**
+     *
+     * @param string|null $field
+     * @return array
+     */
     static public function bodyHttp(?string $field = null): array {
         if (is_null(static::$inputs)) {
             $json = json_decode(file_get_contents('php://input'), true);
@@ -21,6 +35,12 @@ class Util {
         return is_null($field) ? static::$inputs : (static::$inputs[$field] ?? []);
     }
 
+    /**
+     *
+     * @param ReflectionNamedType $reflectionNamedType
+     * @param type $value
+     * @return type
+     */
     static public function fixesByType(ReflectionNamedType $reflectionNamedType, $value) {
         switch ($reflectionNamedType->getName()) {
             case 'int':
@@ -34,6 +54,12 @@ class Util {
         }
     }
 
+    /**
+     *
+     * @param string $documentation
+     * @param string $tag
+     * @return array
+     */
     static public function attributeDocComment(string $documentation, string $tag): array {
         preg_match('/(?:\@' . $tag . ' )([a-zA-Z0-9_:.,|<>=-]+)/u', $documentation, $match);
 
@@ -42,6 +68,11 @@ class Util {
                 [];
     }
 
+    /**
+     *
+     * @param string $documentation
+     * @return array
+     */
     static public function paramByDocComment(string $documentation): array {
         $type = [];
 
@@ -56,6 +87,12 @@ class Util {
         return $type;
     }
 
+    /**
+     *
+     * @param ReflectionProperty $property
+     * @param type $value
+     * @return type
+     */
     static public function fixesTypeByDocComment(ReflectionProperty $property, $value) {
         $type = static::attributeDocComment($property->getDocComment(), 'var');
         $type = array_flip($type);
@@ -72,6 +109,12 @@ class Util {
         }
     }
 
+    /**
+     *
+     * @param ReflectionProperty $property
+     * @param type $value
+     * @return bool
+     */
     static public function matchTypeByDocComment(ReflectionProperty $property, $value): bool {
         $type = static::attributeDocComment($property->getDocComment(), 'var');
         $type = array_flip($type);
