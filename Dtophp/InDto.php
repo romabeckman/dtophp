@@ -19,4 +19,20 @@ abstract class InDto {
         ReflectionDto::populate($this, $_);
     }
 
+    /**
+     *
+     * @return string
+     */
+    final public function toJson(): string {
+        return ReflectionDto::json($this);
+    }
+
+    /**
+     *
+     * @return array
+     */
+    final public function toArray(): array {
+        return ReflectionDto::array($this);
+    }
+
 }
