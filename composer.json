@@ -13,6 +13,9 @@
     "require": {
         "php": ">=7.1.0"
     },
+    "archive": {
+        "exclude": ["/example", "baz", "example_in.php", "example_out.php"]
+    },
     "autoload": {
         "psr-4": {
             "Dtophp\\": "Dtophp/"
