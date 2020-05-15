@@ -1,5 +1,21 @@
 {
+    "name": "romabeckman/dtophp",
+    "description": "A library to DTO in PHP.",
+    "homepage": "https://github.com/romabeckman/dtophp",
+    "authors": [
+        {
+            "name": "Romário Beckman",
+            "email": "romabeckman@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1.0"
+    },
     "autoload": {
-        "psr-4": {"Dtophp\\": "Dtophp/"}
+        "psr-4": {
+            "Dtophp\\": "Dtophp/"
+        }
     }
 }
