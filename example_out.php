@@ -1,3 +1,12 @@
+<?php
+require_once './vendor/autoload.php';
+
+require_once './example/UserOutDto.php';
+require_once './example/AddressOutDto.php';
+
+$addressOutDto = new AddressOutDto('Av. Dr. Heitor Penteado', 'Brazil', 'São Paulo');
+$userOutDto = new UserOutDto('My Name', 'my_email@test.com', $addressOutDto, 30, ['Hamburger', 'Pizza']);
+?>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -18,9 +27,9 @@
                     $addressOutDto = new AddressOutDto('Av. Dr. Heitor Penteado', 'Brazil', 'São Paulo');<br />
                     $userOutDto = new UserOutDto('My Name', 'my_email@test.com', $addressOutDto, 30, ['Hamburger', 'Pizza']);<br><br>
                     var_export($userOutDto->toArray());</br>
-                    //print array ( 'name' => 'My Name', 'email' => 'my_email@test.com', 'address' => array ( 'address' => 'Av. Dr. Heitor Penteado', 'country' => 'Brazil', 'state' => 'São Paulo', ), 'age' => 30, 'foods' => array ( 0 => 'Hamburger', 1 => 'Pizza', ), )<br></br>
-                    var_export($userOutDto->toJson());
-                    //print '{"name":"My Name","email":"my_email@test.com","address":{"address":"Av. Dr. Heitor Penteado","country":"Brazil","state":"S\\u00e3o Paulo"},"age":30,"foods":["Hamburger","Pizza"]}'
+                    <?php var_export($userOutDto->toArray()); ?><br></br>
+                    var_export($userOutDto->toJson());</br>
+                    <?php var_export($userOutDto->toJson()); ?>
                 </code>
             </div>
 

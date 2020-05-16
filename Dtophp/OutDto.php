@@ -9,7 +9,7 @@ use \Dtophp\Libraries\ReflectionDto;
  *
  * @author Romário Beckman <romabeckman@gmail.com>
  */
-abstract class OutDto {
+abstract class OutDto implements OutputsInterface {
 
     /**
      *
