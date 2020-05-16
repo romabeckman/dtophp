@@ -27,30 +27,25 @@ class ReflectionDto {
     static public function populate(InDto $instance, ?string $key = null): void {
         $reflection = new ReflectionClass(get_class($instance));
 
-        foreach ($reflection->getProperties() as $properties) {
-            if (isset(Util::bodyHttp($key)[$properties->name]) === false) {
+        foreach ($reflection->getMethods() as $reflectionMethod) {
+            if ($reflectionMethod->getNumberOfParameters() === 0 || stripos($reflectionMethod->getName(), 'set') !== 0) {
                 continue;
             }
 
-            $name = 'set' . ucfirst($properties->name);
-            try {
-                $reflectionMethod = $reflection->getMethod($name);
+            if ($reflectionMethod->getNumberOfParameters() > 1) {
+                throw new DtoException('The "' . $reflectionMethod->name . '" method must accept only 1 (one) parameter.');
+            }
 
-                if ($reflectionMethod->getNumberOfParameters() === 0) {
-                    throw new DtoException('The "' . $reflectionMethod->name . '" method must have parameter.');
-                }
+            $parameter = $reflectionMethod->getParameters()[0];
 
-                $parameter = $reflectionMethod->getParameters()[0];
+            if (isset(Util::data($key)[$parameter->name])) {
                 $value = is_null($parameter->getClass()) ?
                         static::parameter($parameter, $key) :
                         static::newInClass($parameter);
-
-                if (is_null($value) === false) {
-                    $reflectionMethod->invoke($instance, $value);
-                }
-            } catch (ReflectionException $ex) {
-                throw new DtoException('Missing methods in the class:' . PHP_EOL . PHP_EOL . 'public function ' . $name . '($' . $properties->name . ') { $this->' . $properties->name . ' = $' . $properties->name . '; }' . PHP_EOL . PHP_EOL);
+                
+                is_null($value) || $reflectionMethod->invoke($instance, $value);
             }
+
         }
     }
 
@@ -79,10 +74,10 @@ class ReflectionDto {
         $type = $parameter->getType();
 
         if (is_null($type)) {
-            return Util::bodyHttp($key)[$parameter->name];
+            return Util::data($key)[$parameter->name];
         }
 
-        return Util::fixesByType($type, Util::bodyHttp($key)[$parameter->name]);
+        return Util::fixesByType($type, Util::data($key)[$parameter->name]);
     }
 
     /**
@@ -90,7 +85,7 @@ class ReflectionDto {
      * @param OutDto $instance
      * @return string
      */
-    static public function json(OutDto $instance): string {
+    static public function json($instance): string {
         return json_encode(static::array($instance));
     }
 
@@ -100,7 +95,7 @@ class ReflectionDto {
      * @return array
      * @throws DtoException
      */
-    static public function array(OutDto $instance): array {
+    static public function array($instance): array {
         $reflection = new ReflectionClass(get_class($instance));
         $data = [];
 
@@ -109,11 +104,13 @@ class ReflectionDto {
 
             try {
                 $reflectionMethod = $reflection->getMethod($name);
+                $returnType = $reflectionMethod->getReturnType();
 
-                if (
-                        is_null($reflectionMethod->getReturnType()) === false &&
-                        $reflectionMethod->getReturnType()->isBuiltin() === false
-                ) {
+                if (is_null($returnType) === false && $returnType->allowsNull() === false) {
+                    throw new DtoException('Method "' . $name . '" must allow Null type. Add "?" in return type.');
+                }
+
+                if (is_null($returnType) === false && $returnType->isBuiltin() === false) {
                     $data[$properties->name] = $reflectionMethod->invoke($instance)->toArray();
                 } else {
                     $data[$properties->name] = $reflectionMethod->invoke($instance);

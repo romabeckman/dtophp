@@ -19,15 +19,15 @@ class AddressInDto extends InDto {
      */
     private $state;
 
-    function getAddress(): string {
+    function getAddress(): ?string {
         return $this->address;
     }
 
-    function getCountry(): string {
+    function getCountry(): ?string {
         return $this->country;
     }
 
-    function getState(): string {
+    function getState(): ?string {
         return $this->state;
     }
 

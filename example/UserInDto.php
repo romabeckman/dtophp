@@ -29,23 +29,23 @@ class UserInDto extends InDto {
      */
     private $foods;
 
-    function getName(): string {
+    function getName(): ?string {
         return $this->name;
     }
 
-    function getEmail(): string {
+    function getEmail(): ?string {
         return $this->email;
     }
 
-    function getAddress(): AddressInDto {
+    function getAddress(): ?AddressInDto {
         return $this->address;
     }
 
-    function getAge(): int {
+    function getAge(): ?int {
         return $this->age;
     }
 
-    function getFoods(): array {
+    function getFoods(): ?array {
         return $this->foods;
     }
 

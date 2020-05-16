@@ -10,8 +10,6 @@ require_once './example/AddressInDto.php';
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <title>Example In Dto</title>
-
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     </head>
 
     <body class="bg-light">
@@ -79,7 +77,15 @@ require_once './example/AddressInDto.php';
                         <?php
                         $userInDto = new UserInDto();
                         if (!empty($_POST)) {
+                            ?>
+                            <code>$userInDto = new UserInDto();</code><br><br>
+                            <code>var_export($userInDto, true);</code>
+                            <?php
                             echo '<pre>' . var_export($userInDto, true) . '</pre>';
+                            ?>
+                            <code>var_export($userInDto->toArray(), true);</code>
+                            <?php
+                            echo '<pre>' . var_export($userInDto->toArray(), true) . '</pre>';
                         }
                         ?>
                     </div>
@@ -138,5 +144,7 @@ require_once './example/AddressInDto.php';
                 </div>
             </div>
         </div>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     </body>
 </html>

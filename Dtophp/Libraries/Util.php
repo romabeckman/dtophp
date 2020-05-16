@@ -16,23 +16,30 @@ class Util {
      *
      * @var array
      */
-    static private $inputs;
+    static private $data;
 
     /**
      *
      * @param string|null $field
      * @return array
      */
-    static public function bodyHttp(?string $field = null): array {
-        if (is_null(static::$inputs)) {
-            $json = json_decode(file_get_contents('php://input'), true);
-            static::$inputs = json_last_error() === JSON_ERROR_NONE ?
-                    (array) $json :
-                    (array) filter_input_array(INPUT_POST);
-        }
+    static public function data(?string $field): array {
+        is_null(static::$data) && static::setData();
+        return is_null($field) ?
+                static::$data :
+                (isset(static::$data[$field]) && is_array(static::$data[$field]) ? static::$data[$field] : []);
+    }
 
+    /**
+     *
+     * @return void
+     */
+    static private function setData(): void {
+        $json = json_decode(file_get_contents('php://input'), true);
 
-        return is_null($field) ? static::$inputs : (static::$inputs[$field] ?? []);
+        static::$data = json_last_error() === JSON_ERROR_NONE ?
+                (array) $json :
+                (array) filter_input_array(INPUT_POST);
     }
 
     /**
@@ -49,6 +56,8 @@ class Util {
                 return is_int(filter_var($value, FILTER_VALIDATE_INT)) ? (bool) intval($value) : null;
             case 'float':
                 return filter_var($value, FILTER_VALIDATE_FLOAT) ? floatval($value) : null;
+            case 'array':
+                return filter_var($value, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ? $value : null;
             default:
                 return $value;
         }
