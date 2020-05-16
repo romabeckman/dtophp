@@ -4,20 +4,22 @@ namespace Dtophp\Libraries;
 
 use \Dtophp\Exception\DtoException;
 use \Dtophp\InDto;
-use \Dtophp\OutDto;
 use \ReflectionClass;
 use \ReflectionException;
 use \ReflectionParameter;
 use \UnexpectedValueException;
 
 /**
- * Description
+ * This Class uses Reflection to populate or retrieve data of object.
  *
  * @author Romário Beckman <romabeckman@gmail.com>
  */
 class ReflectionDto {
 
     /**
+     * Populate object using "set" methods.
+     *
+     * Only one parameter will be accepted for "set" methods.
      *
      * @param InDto $instance
      * @param string|null $key
@@ -42,7 +44,7 @@ class ReflectionDto {
                 $value = is_null($parameter->getClass()) ?
                         static::parameter($parameter, $key) :
                         static::newInClass($parameter);
-                
+
                 is_null($value) || $reflectionMethod->invoke($instance, $value);
             }
 
@@ -50,7 +52,7 @@ class ReflectionDto {
     }
 
     /**
-     *
+     * 
      * @param ReflectionParameter $parameter
      * @return InDto
      * @throws UnexpectedValueException
@@ -82,7 +84,7 @@ class ReflectionDto {
 
     /**
      *
-     * @param OutDto $instance
+     * @param type $instance
      * @return string
      */
     static public function json($instance): string {
@@ -91,7 +93,7 @@ class ReflectionDto {
 
     /**
      *
-     * @param OutDto $instance
+     * @param type $instance
      * @return array
      * @throws DtoException
      */

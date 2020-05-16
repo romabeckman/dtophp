@@ -13,7 +13,6 @@ use \ReflectionProperty;
 class Util {
 
     /**
-     *
      * @var array
      */
     static private $data;
@@ -31,6 +30,7 @@ class Util {
     }
 
     /**
+     * Get data of Body HTTP. Accept Json.
      *
      * @return void
      */

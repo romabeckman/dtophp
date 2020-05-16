@@ -5,7 +5,10 @@ namespace Dtophp;
 use \Dtophp\Libraries\ReflectionDto;
 
 /**
- * Description
+ * This class populate data by Body HTTP.
+ *
+ * The __construct is not allowed to overwrite. For populate data, there must have exists "set" methods.
+ * Only one parameter will be accepted for "set" methods.
  *
  * @author Romário Beckman <romabeckman@gmail.com>
  */
