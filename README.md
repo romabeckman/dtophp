@@ -3,7 +3,7 @@
 - Require php >= 7.1.0
 - composer require romabeckman/dtophp
 
-### Injet HTTP body in DTO
+### Inject HTTP body in DTO
 
 Use the abstract InDto class to inject the HTTP body into the DTO. __construct is not allowed to overwrite. Auto-inject the HTTP body and accept json. 
 
