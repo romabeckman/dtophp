@@ -83,7 +83,7 @@ The Validator requires DocComment on attribute. You must use tag *@rule*. To con
 Dtophp\Configuration::setValidatorEngine('MyNameSpace\To\LaravelValidator');
 ```
 
-Below the class that will execute validation, exemple in Laravel. Important, the class must be implemented in your application. And, It´s required implements ``ValidatorInterface`` interface.
+Below the class that will perform the validation. Important, the class must be implemented in your application. And, It´s required implements ``ValidatorInterface`` interface.
 ```php
 class LaravelValidator implements ValidatorInterface {
 
