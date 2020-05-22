@@ -7,12 +7,32 @@
 
 Use the abstract InDto class to inject the HTTP body into the DTO. __construct is not allowed to overwrite. Auto-inject the HTTP body and accept json. 
 
-``` 
+```php
 class UserInDto extends InDto {
+    /**
+     * @rule required|max:255|min:5
+     * @var string
+     */
     private $name;
+    /**
+     * @rule required|email_address
+     * @var string
+     */
     private $email;
+    /**
+     * @rule required
+     * @var AddressInDto
+     */
     private $address;
+    /**
+     * @rule required|integer
+     * @var int
+     */
     private $age;
+    /**
+     * @rule required
+     * @var array
+     */
     private $foods;
     function getName(): string { return $this->name; }
     function getEmail(): string { return $this->email; }
@@ -27,8 +47,20 @@ class UserInDto extends InDto {
 }
 
 class AddressInDto extends InDto {
+    /**
+     * @rule required
+     * @var string
+     */
     private $address;
+    /**
+     * @rule required
+     * @var string
+     */
     private $country;
+    /**
+     * @rule required
+     * @var string
+     */
     private $state;
     function getAddress(): string { return $this->address; }
     function getCountry(): string { return $this->country; }
@@ -38,12 +70,45 @@ class AddressInDto extends InDto {
     function setState(string $state): void { $this->state = $state; }
 }
 
+// The constructor will populate HTTP Body into Object
 $userInDto = new UserInDto(); 
 ``` 
 
+### Validation (example in Laravel)
+
+The Validator requires DocComment on attribute. You must use tag *@rule*. To configure the validator you must call static method, like exemple:
+
+```php
+//Configuring class to validation
+Dtophp\Configuration::setValidatorEngine('MyNameSpace\To\LaravelValidator');
+```
+
+Below the class that will execute validation, exemple in Laravel. Important, the class must be implemented in your application. And, It´s required implements ``ValidatorInterface`` interface.
+```php
+class LaravelValidator implements ValidatorInterface {
+
+    /**
+     * @param OutputsInterface $dto
+     * @param array $rules
+     * @return void
+     */
+    public function handlerDtoValidator(OutputsInterface $dto, array $rules): void {
+        $validator = Validator::make($dto->toArray(), $rules);
+
+        if ($validator->fails()) {
+            Response::make()
+                    ->create($validator->errors()->all(), 400)
+                    ->send();
+            exit;
+        }
+    }
+
+}
+```
+
 ### Output DTO class
 
-``` 
+```php
 class UserOutDto extends OutDto {
     private $name;
     private $email;
