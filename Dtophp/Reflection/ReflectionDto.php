@@ -109,8 +109,7 @@ class ReflectionDto {
         }
 
         if (!empty($rules)) {
-            $validator = new $validatorEngine($instance, $rules);
-            $validator->handler();
+            (new $validatorEngine())->handlerDtoValidator($instance, $rules);
         }
     }
 
