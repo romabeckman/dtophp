@@ -70,7 +70,7 @@ class Util {
      * @return array
      */
     static public function attributeDocComment(string $documentation, string $tag): array {
-        preg_match('/(?:\@' . $tag . ' )([a-zA-Z0-9_:.,|<>=-]+)/u', $documentation, $match);
+        preg_match('/(?:\@' . $tag . ' )([a-zA-Z0-9_:.,|<>=\-\[\]\(\)\{\};]+)/u', $documentation, $match);
 
         return isset($match[1]) ?
                 explode('|', $match[1]) :
