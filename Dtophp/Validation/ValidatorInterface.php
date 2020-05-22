@@ -2,10 +2,12 @@
 
 namespace Dtophp\Validation;
 
+use \Dtophp\OutputsInterface;
+
 /**
  * @author Romário Beckman
  */
 interface ValidatorInterface {
 
-    public function handler(): void;
+    public function handlerDtoValidator(OutputsInterface $dto, array $rules): void;
 }
