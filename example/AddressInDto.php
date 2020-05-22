@@ -5,16 +5,19 @@ use \Dtophp\InDto;
 class AddressInDto extends InDto {
 
     /**
+     * @rule required
      * @var string
      */
     private $address;
 
     /**
+     * @rule required
      * @var string
      */
     private $country;
 
     /**
+     * @rule required
      * @var string
      */
     private $state;

@@ -3,6 +3,9 @@ require_once './vendor/autoload.php';
 
 require_once './example/UserInDto.php';
 require_once './example/AddressInDto.php';
+
+//require_once './example/LaravelValidator.php';
+//Dtophp\Configuration::setValidatorEngine('\LaravelValidator');
 ?>
 <html lang="en">
     <head>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dtophp\Libraries;
+namespace Dtophp\Reflection;
 
 use \ReflectionNamedType;
 use \ReflectionProperty;

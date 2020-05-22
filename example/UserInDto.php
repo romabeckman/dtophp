@@ -5,26 +5,31 @@ use \Dtophp\InDto;
 class UserInDto extends InDto {
 
     /**
+     * @rule required|max:255|min:5
      * @var string
      */
     private $name;
 
     /**
+     * @rule required|email_address
      * @var string
      */
     private $email;
 
     /**
+     * @rule required
      * @var AddressInDto
      */
     private $address;
 
     /**
+     * @rule required|integer
      * @var int
      */
     private $age;
 
     /**
+     * @rule required
      * @var array
      */
     private $foods;

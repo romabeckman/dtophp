@@ -2,7 +2,7 @@
 
 namespace Dtophp;
 
-use \Dtophp\Libraries\ReflectionDto;
+use \Dtophp\Reflection\ReflectionDto;
 
 /**
  * Description

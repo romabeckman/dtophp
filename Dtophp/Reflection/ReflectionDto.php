@@ -1,7 +1,8 @@
 <?php
 
-namespace Dtophp\Libraries;
+namespace Dtophp\Reflection;
 
+use \Dtophp\Configuration;
 use \Dtophp\Exception\DtoException;
 use \Dtophp\InDto;
 use \ReflectionClass;
@@ -48,6 +49,8 @@ class ReflectionDto {
                 is_null($value) || $reflectionMethod->invoke($instance, $value);
             }
         }
+
+        static::validation($reflection, $instance);
     }
 
     /**
@@ -79,6 +82,36 @@ class ReflectionDto {
         }
 
         return Util::fixesByType($type, Util::data($key)[$parameter->name]);
+    }
+
+    /**
+     *
+     * @param ReflectionClass $reflection
+     * @param InDto $instance
+     * @return type
+     */
+    static private function validation(ReflectionClass $reflection, InDto $instance) {
+        $validatorEngine = Configuration::getValidatorEngine();
+
+        if (is_null($validatorEngine)) {
+            return;
+        }
+
+        $rules = [];
+        foreach ($reflection->getProperties() as $property) {
+            $rule = Util::attributeDocComment($property->getDocComment(), 'rule');
+
+            if (empty($rule)) {
+                continue;
+            }
+
+            $rules[$property->getName()] = $rule;
+        }
+
+        if (!empty($rules)) {
+            $validator = new $validatorEngine($instance, $rules);
+            $validator->handler();
+        }
     }
 
     /**
