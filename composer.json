@@ -19,6 +19,7 @@
     "autoload": {
         "psr-4": {
             "DTOPHP\\": "DTOPHP/"
-        }
+        },
+        "exclude-from-classmap": ["example/", "src/", "example_in.php", "example_out.php"]
     }
 }
