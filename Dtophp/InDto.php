@@ -48,6 +48,13 @@ abstract class InDto implements OutputsInterface {
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string {
+        return $this->toJson();
+    }
+
+    /**
      * @throws DtoException
      */
     private function handler(?array $data) {
