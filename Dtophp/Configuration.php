@@ -3,7 +3,7 @@
 namespace Dtophp;
 
 use \Dtophp\Exception\ValidatorException;
-use \Dtophp\Validation\ValidatorInterface;
+use \Dtophp\ValidatorInterface;
 use \ReflectionClass;
 
 /**

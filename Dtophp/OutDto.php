@@ -2,7 +2,7 @@
 
 namespace Dtophp;
 
-use \Dtophp\Reflection\ReflectionDto;
+use \Dtophp\Helpers\Output;
 
 /**
  * Description
@@ -16,7 +16,7 @@ abstract class OutDto implements OutputsInterface {
      * @return string
      */
     final public function toJson(): string {
-        return ReflectionDto::json($this);
+        return Output::json($this);
     }
 
     /**
@@ -24,7 +24,7 @@ abstract class OutDto implements OutputsInterface {
      * @return array
      */
     final public function toArray(): array {
-        return ReflectionDto::array($this);
+        return Output::array($this);
     }
 
 }

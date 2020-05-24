@@ -3,14 +3,15 @@ require_once './vendor/autoload.php';
 
 require_once './example/UserInDto.php';
 require_once './example/AddressInDto.php';
+require_once './example/ExampleValidator.php';
 
-//require_once './example/LaravelValidator.php';
-//Dtophp\Configuration::setValidatorEngine('\LaravelValidator');
+Dtophp\Configuration::setValidatorEngine('\ExampleValidator');
 ?>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="src/bootstrap.min.css" />
 
         <title>Example In Dto</title>
     </head>
@@ -78,8 +79,8 @@ require_once './example/AddressInDto.php';
                     <h4 class="mb-3">DTO Objects filled with POST</h4>
                     <div class="jumbotron">
                         <?php
-                        $userInDto = new UserInDto();
                         if (!empty($_POST)) {
+                            $userInDto = new UserInDto();
                             ?>
                             <code>$userInDto = new UserInDto();</code><br><br>
                             <code>var_export($userInDto, true);</code>
@@ -108,46 +109,107 @@ require_once './example/AddressInDto.php';
                 <div class="row">
                     <div class="col-md-6">
                         <code>
-                            use \Dtophp\InDto;<br /><br />
-                            class UserInDto extends InDto {<br /><br />
-                            private $name;<br />
-                            private $email;<br />
-                            private $address;<br />
-                            private $age;<br />
-                            private $foods;<br /><br />
-                            function getName(): string <br />{ return $this->name; }<br />
-                            function getEmail(): string <br />{ return $this->email; }<br />
-                            function getAddress(): AddressInDto <br />{ return $this->address; }<br />
-                            function getAge(): int <br />{ return $this->age; }<br />
-                            function getFoods(): array <br />{ return $this->foods; }<br /><br />
-                            function setName(string $name): void <br />{ $this->name = $name; }<br />
-                            function setEmail(string $email): void <br />{ $this->email = $email; }<br />
-                            function setAddress(AddressInDto $address): void <br />{ $this->address = $address; }<br />
-                            function setAge(int $age): void <br />{ $this->age = $age; }<br />
-                            function setFoods(array $foods): void <br />{ $this->foods = $foods; }<br /><br />
+                            use \Dtophp\InDto;<br>
+                            class UserInDto extends InDto {<br>
+                            /**<br>
+                            * @rule required|max:255|min:5<br>
+                            * @var string<br>
+                            */<br>
+                            private $name;<br>
+                            /**<br>
+                            * @rule required|email_address<br>
+                            * @var string<br>
+                            */<br>
+                            private $email;<br>
+                            /**<br>
+                            * @rule required<br>
+                            * @var AddressInDto<br>
+                            */<br>
+                            private $address;<br>
+                            /**<br>
+                            * @rule required|integer<br>
+                            * @var int<br>
+                            */<br>
+                            private $age;<br>
+                            /**<br>
+                            * @rule required<br>
+                            * @var array<br>
+                            */<br>
+                            private $foods;<br>
+                            function getName(): string {<br>
+                            return $this->name;<br>
+                            }<br>
+                            function getEmail(): string {<br>
+                            return $this->email;<br>
+                            }<br>
+                            function getAddress(): AddressInDto {<br>
+                            return $this->address;<br>
+                            }<br>
+                            function getAge(): int {<br>
+                            return $this->age;<br>
+                            }<br>
+                            function getFoods(): array {<br>
+                            return $this->foods;<br>
+                            }<br>
+                            function setName(string $name): void {<br>
+                            $this->name = $name;<br>
+                            }<br>
+                            function setEmail(string $email): void {<br>
+                            $this->email = $email;<br>
+                            }<br>
+                            function setAddress(AddressInDto $address): void {<br>
+                            $this->address = $address;<br>
+                            }<br>
+                            function setAge(int $age): void {<br>
+                            $this->age = $age;<br>
+                            }<br>
+                            function setFoods(array $foods): void {<br>
+                            $this->foods = $foods;<br>
+                            }<br>
                             }
                         </code>
                     </div>
                     <div class="col-md-6">
                         <code>
-                            use \Dtophp\InDto;<br /><br />
-                            class AddressInDto extends InDto {<br /><br />
-                            private $address;<br />
-                            private $country;<br />
-                            private $state;<br /><br />
-                            function getAddress(): string <br />{ return $this->address; }<br />
-                            function getCountry(): string <br />{ return $this->country; }<br />
-                            function getState(): string <br />{ return $this->state; }<br /><br />
-                            function setAddress(string $address): void <br />{ $this->address = $address; }<br />
-                            function setCountry(string $country): void <br />{ $this->country = $country; }<br />
-                            function setState(string $state): void <br />{ $this->state = $state; }<br /><br />
+                            class AddressInDto extends InDto {<br>
+                            /**<br>
+                            * @rule required<br>
+                            * @var string<br>
+                            */<br>
+                            private $address;<br>
+                            /**<br>
+                            * @rule required<br>
+                            * @var string<br>
+                            */<br>
+                            private $country;<br>
+                            /**<br>
+                            * @rule required<br>
+                            * @var string<br>
+                            */<br>
+                            private $state;<br>
+                            function getAddress(): ?string {<br>
+                            return $this->address;<br>
+                            }<br>
+                            function getCountry(): ?string {<br>
+                            return $this->country;<br>
+                            }<br>
+                            function getState(): ?string {<br>
+                            return $this->state;<br>
+                            }<br>
+                            function setAddress(string $address): void {<br>
+                            $this->address = $address;<br>
+                            }<br>
+                            function setCountry(string $country): void {<br>
+                            $this->country = $country;<br>
+                            }<br>
+                            function setState(string $state): void {<br>
+                            $this->state = $state;<br>
+                            }<br>
                             }
                         </code>
                     </div>
                 </div>
             </div>
         </div>
-
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     </body>
 </html>

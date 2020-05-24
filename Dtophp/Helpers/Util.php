@@ -1,6 +1,6 @@
 <?php
 
-namespace Dtophp\Reflection;
+namespace Dtophp\Helpers;
 
 use \ReflectionNamedType;
 use \ReflectionProperty;
@@ -13,31 +13,12 @@ use \ReflectionProperty;
 class Util {
 
     /**
-     * @var array
-     */
-    static private $data;
-
-    /**
-     *
-     * @param string|null $field
      * @return array
      */
-    static public function data(?string $field): array {
-        is_null(static::$data) && static::setData();
-        return is_null($field) ?
-                static::$data :
-                (isset(static::$data[$field]) && is_array(static::$data[$field]) ? static::$data[$field] : []);
-    }
-
-    /**
-     * Get data of Body HTTP. Accept Json.
-     *
-     * @return void
-     */
-    static private function setData(): void {
+    static public function getData(): array {
         $json = json_decode(file_get_contents('php://input'), true);
 
-        static::$data = json_last_error() === JSON_ERROR_NONE ?
+        return json_last_error() === JSON_ERROR_NONE ?
                 (array) $json :
                 (array) filter_input_array(INPUT_POST);
     }
@@ -58,6 +39,8 @@ class Util {
                 return filter_var($value, FILTER_VALIDATE_FLOAT) ? floatval($value) : null;
             case 'array':
                 return filter_var($value, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ? $value : null;
+            case 'string':
+                return is_string($value) ? $value : null;
             default:
                 return $value;
         }
@@ -140,6 +123,14 @@ class Util {
             default:
                 return true;
         }
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    static public function toPascalCase(string $name): string {
+        return preg_replace('/[_-]/u', '', ucwords($name, " \t\r\n\f\v_-"));
     }
 
 }

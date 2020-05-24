@@ -1,6 +1,6 @@
 <?php
 
-namespace Dtophp\Validation;
+namespace Dtophp;
 
 use \Dtophp\OutputsInterface;
 
