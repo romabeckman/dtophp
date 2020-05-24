@@ -12,7 +12,9 @@ namespace DTOPHP;
  *
  * @author Romário Beckman
  */
-interface OutputsInterface {
+interface OutputInterface {
+
+    public function __toString(): string;
 
     public function toJson(): string;
 

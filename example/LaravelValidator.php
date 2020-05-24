@@ -1,6 +1,6 @@
 <?php
 
-use \DTOPHP\OutputsInterface;
+use \DTOPHP\OutputInterface;
 use \DTOPHP\ValidatorInterface;
 use \Illuminate\Support\Facades\Response;
 use \Illuminate\Support\Facades\Validator;
@@ -11,11 +11,11 @@ use \Illuminate\Support\Facades\Validator;
 class LaravelValidator implements ValidatorInterface {
 
     /**
-     * @param OutputsInterface $dto
+     * @param OutputInterface $dto
      * @param array $rules
      * @return void
      */
-    public function handlerDtoValidator(OutputsInterface $dto, array $rules): void {
+    public function handlerDtoValidator(OutputInterface $dto, array $rules): void {
         $validator = Validator::make($dto->toArray(), $rules);
 
         if ($validator->fails()) {

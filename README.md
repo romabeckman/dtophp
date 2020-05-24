@@ -88,11 +88,11 @@ Below the class that will perform the validation. Important, the class must be i
 class LaravelValidator implements ValidatorInterface {
 
     /**
-     * @param OutputsInterface $dto
+     * @param OutputInterface $dto
      * @param array $rules
      * @return void
      */
-    public function handlerDtoValidator(OutputsInterface $dto, array $rules): void {
+    public function handlerDtoValidator(OutputInterface $dto, array $rules): void {
         $validator = Validator::make($dto->toArray(), $rules);
 
         if ($validator->fails()) {

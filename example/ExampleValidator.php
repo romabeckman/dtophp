@@ -1,6 +1,6 @@
 <?php
 
-use \DTOPHP\OutputsInterface;
+use \DTOPHP\OutputInterface;
 use \DTOPHP\ValidatorInterface;
 
 /**
@@ -9,11 +9,11 @@ use \DTOPHP\ValidatorInterface;
 class ExampleValidator implements ValidatorInterface {
 
     /**
-     * @param OutputsInterface $dto
+     * @param OutputInterface $dto
      * @param array $rules
      * @return void
      */
-    public function handlerDtoValidator(OutputsInterface $dto, array $rules): void {
+    public function handlerDtoValidator(OutputInterface $dto, array $rules): void {
         echo "Rules in " . get_class($dto) . ":<pre>";
         var_export($rules);
         echo "</pre><hr>";

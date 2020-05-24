@@ -4,10 +4,9 @@ namespace DTOPHP;
 
 use \DTOPHP\Configuration;
 use \DTOPHP\Exception\DtoException;
-use \DTOPHP\Helpers\Output;
 use \DTOPHP\Helpers\Util;
 use \DTOPHP\InDto;
-use \DTOPHP\OutputsInterface;
+use \DTOPHP\OutputInterface;
 use \ReflectionClass;
 use \ReflectionException;
 use \ReflectionParameter;
@@ -21,7 +20,9 @@ use \UnexpectedValueException;
  *
  * @author Romário Beckman <romabeckman@gmail.com>
  */
-abstract class InDto implements OutputsInterface {
+abstract class InDto implements OutputInterface {
+
+    use OutputTrait;
 
     /**
      *
@@ -29,29 +30,6 @@ abstract class InDto implements OutputsInterface {
      */
     final public function __construct(?array $_ = null) {
         $this->handler(is_null($_) ? Util::getData() : $_);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    final public function toJson(): string {
-        return Output::json($this);
-    }
-
-    /**
-     *
-     * @return array
-     */
-    final public function toArray(): array {
-        return Output::array($this);
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString(): string {
-        return $this->toJson();
     }
 
     /**
@@ -104,7 +82,7 @@ abstract class InDto implements OutputsInterface {
         $reflection = new ReflectionClass($parameter->getClass()->name);
 
         if (empty($reflection->getParentClass()) || $reflection->getParentClass()->getName() !== InDto::class) {
-            throw new UnexpectedValueException('The class "' . $reflection->getName() . '" must extends abstract class "' . InDto::class . '".');
+            throw new DtoException('The class "' . $reflection->getName() . '" must extends abstract class "' . InDto::class . '".');
         }
 
         return $reflection->newInstance($data[$parameter->getName()] ?? []);

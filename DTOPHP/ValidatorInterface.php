@@ -2,12 +2,12 @@
 
 namespace DTOPHP;
 
-use \DTOPHP\OutputsInterface;
+use \DTOPHP\OutputInterface;
 
 /**
  * @author Romário Beckman
  */
 interface ValidatorInterface {
 
-    public function handlerDtoValidator(OutputsInterface $dto, array $rules): void;
+    public function handlerDtoValidator(OutputInterface $dto, array $rules): void;
 }
