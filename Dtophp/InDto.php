@@ -52,10 +52,10 @@ abstract class InDto implements OutputsInterface {
      */
     private function handler(?array $data) {
         $validatorEngine = Configuration::getValidatorEngine();
-        $refection = new ReflectionClass(static::class);
+        $reflection = new ReflectionClass(static::class);
         $rules = [];
 
-        foreach ($refection->getProperties() as $property) {
+        foreach ($reflection->getProperties() as $property) {
             if (is_null($validatorEngine) === false && $rule = Util::attributeDocComment($property->getDocComment(), 'rule')) {
                 $rules[$property->getName()] = $rule;
             }
@@ -63,7 +63,7 @@ abstract class InDto implements OutputsInterface {
             $setMethod = 'set' . Util::toPascalCase($property->getName());
 
             try {
-                $reflectionMethod = $refection->getMethod($setMethod);
+                $reflectionMethod = $reflection->getMethod($setMethod);
 
                 if ($reflectionMethod->getNumberOfParameters() === 0) {
                     throw new DtoException('The "' . $reflectionMethod->getName() . '" method must accept parameter.');

@@ -3,8 +3,8 @@
 namespace Dtophp\Helpers;
 
 use \Dtophp\Exception\DtoException;
+use \Dtophp\OutputsInterface;
 use \ReflectionClass;
-use \ReflectionException;
 
 /**
  * This Class uses Reflection to populate or retrieve data of object.
@@ -18,7 +18,7 @@ class Output {
      * @param type $instance
      * @return string
      */
-    static public function json($instance): string {
+    static public function json(OutputsInterface $instance): string {
         return json_encode(static::array($instance));
     }
 
@@ -28,35 +28,19 @@ class Output {
      * @return array
      * @throws DtoException
      */
-    static public function array($instance): array {
+    static public function array(OutputsInterface $instance): array {
         $reflection = new ReflectionClass(get_class($instance));
         $data = [];
 
-        foreach ($reflection->getMethods() as $reflectionMethod) {
-            if (stripos($reflectionMethod->getName(), 'get') !== 0) {
-                continue;
-            }
+        foreach ($reflection->getProperties() as $property) {
+            $property->setAccessible(true);
 
-            $name = lcfirst(substr($reflectionMethod->getName(), 3));
-            try {
-                $property = $reflection->getProperty($name);
-                $property->setAccessible(true);
-                if (is_null($property->getValue($instance))) {
-                    $data[$name] = null;
-                    continue;
-                }
-            } catch (ReflectionException $ex) {
-                throw new DtoException('The method name "' . $reflectionMethod->getName() . '" does not match any attibutes in the "' . $reflection->getName() . '" class. Attribute name "$' . $name . '" does not exist.');
-            }
+            $data[$property->getName()] = $property->getValue($instance);
 
-            $returnType = $reflectionMethod->getReturnType();
-
-            if (is_null($returnType) === false && $returnType->isBuiltin() === false) {
-                $data[$name] = $reflectionMethod->invoke($instance)->toArray();
-            } else {
-                $data[$name] = $reflectionMethod->invoke($instance);
-            }
+            is_object($data[$property->getName()]) &&
+                    $data[$property->getName()] = $data[$property->getName()]->toArray();
         }
+
         return $data;
     }
 
