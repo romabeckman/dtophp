@@ -1,6 +1,6 @@
 <?php
 
-use \Dtophp\OutDto;
+use \DTOPHP\OutDto;
 
 class UserOutDto extends OutDto {
 

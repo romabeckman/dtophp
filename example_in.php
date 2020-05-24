@@ -5,7 +5,7 @@ require_once './example/UserInDto.php';
 require_once './example/AddressInDto.php';
 require_once './example/ExampleValidator.php';
 
-Dtophp\Configuration::setValidatorEngine('\ExampleValidator');
+DTOPHP\Configuration::setValidatorEngine('\ExampleValidator');
 ?>
 <html lang="en">
     <head>
@@ -109,7 +109,7 @@ Dtophp\Configuration::setValidatorEngine('\ExampleValidator');
                 <div class="row">
                     <div class="col-md-6">
                         <code>
-                            use \Dtophp\InDto;<br>
+                            use \DTOPHP\InDto;<br>
                             class UserInDto extends InDto {<br>
                             /**<br>
                             * @rule required|max:255|min:5<br>

@@ -44,7 +44,7 @@ $userOutDto = new UserOutDto('My Name', 'my_email@test.com', $addressOutDto, 30,
                 <div class="row">
                     <div class="col-md-6">
                         <code>
-                            use \Dtophp\OutDto;<br><br>
+                            use \DTOPHP\OutDto;<br><br>
                             class UserOutDto extends OutDto {<br><br>
                             private $name;<br>
                             private $email;<br>
@@ -78,7 +78,7 @@ $userOutDto = new UserOutDto('My Name', 'my_email@test.com', $addressOutDto, 30,
                     </div>
                     <div class="col-md-6">
                         <code>
-                            use \Dtophp\OutDto;<br><br>
+                            use \DTOPHP\OutDto;<br><br>
                             class AddressOutDto extends OutDto {<br><br>
                             private $address;<br>
                             private $country;<br>

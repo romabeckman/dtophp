@@ -1,6 +1,6 @@
 <?php
 
-use \Dtophp\InDto;
+use \DTOPHP\InDto;
 
 class AddressInDto extends InDto {
 

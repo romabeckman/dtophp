@@ -5,7 +5,7 @@
 
 ### Inject HTTP body in DTO
 
-Use the abstract InDto class to inject the HTTP body into the DTO. __construct is not allowed to overwrite. Auto-inject the HTTP body and accept json. 
+Use the abstract InDto class to inject the HTTP body into the DTO. __construct is not allowed to overwrite. Auto-inject the HTTP body and accept json.
 
 ```php
 class UserInDto extends InDto {
@@ -71,8 +71,8 @@ class AddressInDto extends InDto {
 }
 
 // The constructor will populate HTTP Body into Object
-$userInDto = new UserInDto(); 
-``` 
+$userInDto = new UserInDto();
+```
 
 ### Validation (example in Laravel)
 
@@ -80,7 +80,7 @@ The Validator requires DocComment on attribute. You must use tag *@rule*. To con
 
 ```php
 //Configuring class to validation
-Dtophp\Configuration::setValidatorEngine('MyNameSpace\To\LaravelValidator');
+DTOPHP\Configuration::setValidatorEngine('MyNameSpace\To\LaravelValidator');
 ```
 
 Below the class that will perform the validation. Important, the class must be implemented in your application. And, It´s required implements ``ValidatorInterface`` interface.
@@ -149,6 +149,6 @@ $userOutDto = new UserOutDto('My Name', 'my_email@test.com', $addressOutDto, 30,
 var_export($userOutDto->toArray());
 //print array ( 'name' => 'My Name', 'email' => 'my_email@test.com', 'address' => array ( 'address' => 'Av. Dr. Heitor Penteado', 'country' => 'Brazil', 'state' => 'São Paulo', ), 'age' => 30, 'foods' => array ( 0 => 'Hamburger', 1 => 'Pizza', ), )
 
-var_export($userOutDto->toJson()); //print '{"name":"My Name","email":"my_email@test.com","address":{"address":"Av. Dr. Heitor Penteado","country":"Brazil","state":"S\\u00e3o Paulo"},"age":30,"foods":["Hamburger","Pizza"]}' 
-``` 
+var_export($userOutDto->toJson()); //print '{"name":"My Name","email":"my_email@test.com","address":{"address":"Av. Dr. Heitor Penteado","country":"Brazil","state":"S\\u00e3o Paulo"},"age":30,"foods":["Hamburger","Pizza"]}'
+```
 

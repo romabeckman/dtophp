@@ -1,7 +1,7 @@
 <?php
 
-use \Dtophp\OutputsInterface;
-use \Dtophp\ValidatorInterface;
+use \DTOPHP\OutputsInterface;
+use \DTOPHP\ValidatorInterface;
 
 /**
  * @author Romário Beckman

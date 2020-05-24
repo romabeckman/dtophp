@@ -1,7 +1,7 @@
 <?php
 
-use \Dtophp\OutputsInterface;
-use \Dtophp\ValidatorInterface;
+use \DTOPHP\OutputsInterface;
+use \DTOPHP\ValidatorInterface;
 use \Illuminate\Support\Facades\Response;
 use \Illuminate\Support\Facades\Validator;
 
