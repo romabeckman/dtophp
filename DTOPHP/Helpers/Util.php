@@ -29,8 +29,8 @@ class Util {
      * @param type $value
      * @return type
      */
-    static public function fixesByType(ReflectionNamedType $reflectionNamedType, $value) {
-        switch ($reflectionNamedType->getName()) {
+    static public function fixesByType(string $type, $value) {
+        switch ($type) {
             case 'int':
                 return is_int(filter_var($value, FILTER_VALIDATE_INT)) ? intval($value) : null;
             case 'bool':
@@ -38,7 +38,7 @@ class Util {
             case 'float':
                 return filter_var($value, FILTER_VALIDATE_FLOAT) ? floatval($value) : null;
             case 'array':
-                return filter_var($value, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ? $value : null;
+                return filter_var($value, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ?: null;
             case 'string':
                 return is_string($value) ? $value : null;
             default:
@@ -65,18 +65,9 @@ class Util {
      * @param string $documentation
      * @return array
      */
-    static public function paramByDocComment(string $documentation): array {
-        $type = [];
-
-        preg_match_all('/(?:\@param )((string|null|int|float|double|bool|array|\|)+) \$([a-zA-Z0-9]+)/u', $documentation, $match);
-
-        if (isset($match[3])) {
-            foreach ($match[3] as $index => $value) {
-                $type[$value] = explode('|', $match[1][$index]);
-            }
-        }
-
-        return $type;
+    static public function paramByDocComment(string $documentation): string {
+        preg_match('/(?:\@(param|var)) ((string|int|float|double|bool|array)|\||null)+/u', $documentation, $match);
+        return $match[3] ?? '';
     }
 
     /**

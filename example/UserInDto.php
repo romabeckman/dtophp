@@ -8,31 +8,31 @@ class UserInDto extends InDto {
      * @rule required|max:255|min:5
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @rule required|email_address
      * @var string
      */
-    private $email;
+    private string $email;
 
     /**
      * @rule required
      * @var AddressInDto
      */
-    private $address;
+    private AddressInDto $address;
 
     /**
      * @rule required|integer
      * @var int
      */
-    private $age;
+    private int $age;
 
     /**
      * @rule required
      * @var array
      */
-    private $foods;
+    private array $foods;
 
     function getName(): string {
         return $this->name;

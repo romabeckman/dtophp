@@ -36,7 +36,7 @@ trait OutputTrait {
 
         foreach ($reflection->getProperties() as $property) {
             $property->setAccessible(true);
-            $data[$property->getName()] = $property->getValue($this);
+            $data[$property->getName()] = $property->isInitialized($this) ? $property->getValue($this) : null;
 
             if (is_object($data[$property->getName()])) {
                 $reflectionProperty = new ReflectionClass(get_class($data[$property->getName()]));

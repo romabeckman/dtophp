@@ -5,12 +5,13 @@ namespace DTOPHP;
 use \DTOPHP\Configuration;
 use \DTOPHP\Exception\DtoException;
 use \DTOPHP\Helpers\Util;
-use \DTOPHP\InDto;
 use \DTOPHP\OutputInterface;
+use \DTOPHP\Parameter\FixedByDocComment;
+use \DTOPHP\Parameter\FixedByReflectorType;
+use \DTOPHP\Parameter\GetDirectFromData;
+use \DTOPHP\Parameter\InDtoClass;
+use \DTOPHP\Parameter\ParameterNotExistInData;
 use \ReflectionClass;
-use \ReflectionException;
-use \ReflectionParameter;
-use \UnexpectedValueException;
 
 /**
  * This class populate data by Body HTTP.
@@ -45,63 +46,23 @@ abstract class InDto implements OutputInterface {
                 $rules[$property->getName()] = $rule;
             }
 
-            $setMethod = 'set' . Util::toPascalCase($property->getName());
+            $parameter = new ParameterNotExistInData;
+            $parameter
+                    ->setNext(new InDtoClass)
+                    ->setNext(new FixedByReflectorType)
+                    ->setNext(new FixedByDocComment)
+                    ->setNext(new GetDirectFromData);
 
-            try {
-                $reflectionMethod = $reflection->getMethod($setMethod);
+            $value = $parameter->handle($property, $data);
 
-                if ($reflectionMethod->getNumberOfParameters() === 0) {
-                    throw new DtoException('The "' . $reflectionMethod->getName() . '" method must accept parameter.');
-                }
-
-                if (isset($data[$property->getName()])) {
-                    $parameter = $reflectionMethod->getParameters()[0];
-
-                    $value = is_null($parameter->getClass()) ?
-                            $this->parameter($parameter, $data) :
-                            $this->newInClass($parameter, $data);
-
-                    is_null($value) || $reflectionMethod->invoke($this, $value);
-                }
-            } catch (ReflectionException $exc) {
-                throw new DtoException('The "' . $setMethod . '" method not found.');
+            if (is_null($value) === false) {
+                $property->setAccessible(true);
+                $property->setValue($this, $value);
             }
         }
 
         // Call validator
         empty($rules) || (new $validatorEngine())->handlerDtoValidator($this, $rules);
-    }
-
-    /**
-     *
-     * @param ReflectionParameter $parameter
-     * @return InDto
-     * @throws UnexpectedValueException
-     */
-    private function newInClass(ReflectionParameter $parameter, ?array $data): InDto {
-        $reflection = new ReflectionClass($parameter->getClass()->name);
-
-        if (empty($reflection->getParentClass()) || $reflection->getParentClass()->getName() !== InDto::class) {
-            throw new DtoException('The class "' . $reflection->getName() . '" must extends abstract class "' . InDto::class . '".');
-        }
-
-        return $reflection->newInstance($data[$parameter->getName()] ?? []);
-    }
-
-    /**
-     *
-     * @param ReflectionParameter $parameter
-     * @param string|null $key
-     * @return type
-     */
-    private function parameter(ReflectionParameter $parameter, ?array $data) {
-        $type = $parameter->getType();
-
-        if (is_null($type)) {
-            return $data[$parameter->getName()];
-        }
-
-        return Util::fixesByType($type, $data[$parameter->getName()]);
     }
 
 }
