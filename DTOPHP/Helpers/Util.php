@@ -16,11 +16,18 @@ class Util {
      * @return array
      */
     static public function getData(): array {
-        $json = json_decode(file_get_contents('php://input'), true);
+        $data = json_decode(file_get_contents('php://input'), true);
 
-        return json_last_error() === JSON_ERROR_NONE ?
-                (array) $json :
-                (array) filter_input_array(INPUT_POST);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return (array) $data;
+        }
+
+        $data = (array) filter_input_array(INPUT_POST);
+        if ($data = (array) filter_input_array(INPUT_POST)) {
+            return $data;
+        }
+
+        return (array) filter_input_array(INPUT_GET);
     }
 
     /**
