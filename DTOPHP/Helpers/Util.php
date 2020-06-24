@@ -23,7 +23,7 @@ class Util {
         }
 
         $data = (array) filter_input_array(INPUT_POST);
-        if ($data = (array) filter_input_array(INPUT_POST)) {
+        if (!empty($data)) {
             return $data;
         }
 
